@@ -30,8 +30,10 @@
     "rules": {
         "react/react-in-jsx-scope": ["off"],
         "react/jsx-uses-react": ["off"],
-        "react/jsx-props-no-spreading": ["warn"],
-        "react/no-unescaped-entities": ["off"],"react/function-component-definition": [
+        "react/jsx-props-no-spreading": ["off"],
+        "react/jsx-no-constructed-context-values": ["warn"],
+        "@typescript-eslint/naming-convention": ["off"],
+        "react/no-unescaped-entities": ["off"], "react/function-component-definition": [
             2,
             {
               "namedComponents": "arrow-function",

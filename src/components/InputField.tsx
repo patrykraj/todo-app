@@ -1,14 +1,22 @@
 import React, { useRef } from "react";
+import { Dispatch, actions } from "../context";
+
 import "./styles.css";
 
 interface Props {
   todo: string;
-  setTodo: React.Dispatch<React.SetStateAction<string>>;
+  setTodo: Dispatch;
   handleCreateTodo: (e: React.SyntheticEvent) => void;
 }
 
 const InputField: React.FC<Props> = ({ todo, setTodo, handleCreateTodo }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo({
+      type: actions.Input,
+      payload: e.target.value,
+    });
+  };
 
   return (
     <form
@@ -23,7 +31,7 @@ const InputField: React.FC<Props> = ({ todo, setTodo, handleCreateTodo }) => {
         className="input__box"
         type="input"
         placeholder="Enter task"
-        onChange={(e) => setTodo(e.target.value)}
+        onChange={inputHandler}
         value={todo}
       />
       <button type="submit" className="input_submit">

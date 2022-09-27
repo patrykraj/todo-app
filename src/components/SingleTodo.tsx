@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
-import { Todo } from "../models/model";
+import { Dispatch, actions } from "../context";
+import EditField from "./EditField";
+
 import "./styles.css";
 
 type Props = {
   children: string;
   id: number;
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  setTodos: Dispatch;
   isDone: boolean;
 };
 
@@ -16,15 +18,17 @@ const SingleTodo: React.FC<Props> = ({ children, id, isDone, setTodos }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDeleteTodo = () => {
-    setTodos((prevState) => prevState.filter((item) => item.id !== id));
+    setTodos({
+      type: actions.Delete,
+      payload: id,
+    });
   };
 
   const handleIsDone = () => {
-    setTodos((prevState) =>
-      prevState.map((item) =>
-        item.id === id ? { ...item, isDone: !item.isDone } : item,
-      ),
-    );
+    setTodos({
+      type: actions.Done,
+      payload: id,
+    });
   };
 
   useEffect(() => {
@@ -35,11 +39,12 @@ const SingleTodo: React.FC<Props> = ({ children, id, isDone, setTodos }) => {
     <li className={`list-element ${isDone ? "done" : ""}`}>
       <span className="list-element__text">
         {editMode ? (
-          <input
-            ref={inputRef}
-            className="list-element__input"
-            type="text"
+          <EditField
+            inputRef={inputRef}
             defaultValue={children}
+            setEditMode={setEditMode}
+            setTodos={setTodos}
+            id={id}
           />
         ) : (
           children

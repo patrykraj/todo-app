@@ -1,31 +1,34 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
 import InputField from "./components/InputField";
 import TodoList from "./components/TodoList";
-import { Todo } from "./models/model";
+import useTodo, { actions } from "./context";
+
+import "./App.css";
 
 const App: React.FC = () => {
-  const [todo, setTodo] = useState<string>("");
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const { state, dispatch } = useTodo();
 
   const handleCreateTodo = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setTodos([
-      ...todos,
-      { id: new Date().getTime(), description: todo, isDone: false },
-    ]);
-    setTodo("");
+    dispatch({
+      type: actions.Add,
+      payload: {
+        id: new Date().getTime(),
+        description: state.input,
+        isDone: false,
+      },
+    });
   };
 
   return (
     <div className="App">
       <h1 className="heading">TASKIFY</h1>
       <InputField
-        todo={todo}
-        setTodo={setTodo}
+        todo={state.input}
+        setTodo={dispatch}
         handleCreateTodo={handleCreateTodo}
       />
-      <TodoList todos={todos} setTodos={setTodos} />
+      <TodoList todos={state.todos} setTodos={dispatch} />
     </div>
   );
 };
