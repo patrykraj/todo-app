@@ -66,6 +66,13 @@ input {
   padding: 20px;
   margin: 15px 0;
   border-radius: 10px;
+  transition: all .2s;
+}
+
+.list-element:hover {
+  cursor: grab;
+  transform: scale(1.03);
+  box-shadow: 0 0 5px black;
 }
 
 .list-element.done {
@@ -81,4 +88,52 @@ input {
 .list-element__icon {
   margin: 0 5px;
   cursor: pointer;
+}
+
+.grid {
+  display: flex;
+  width: 95%;
+}
+
+.grid-container {
+  border-radius: 10px;
+  margin-top: 1rem;
+  width: 100%;
+  align-self: baseline;
+}
+
+.grid-container:nth-child(1) {
+  background-color: #32c3cd;
+  margin-right: 10px;
+}
+
+.grid-container:nth-child(2) {
+  background-color: #eb6750;
+  margin-left: 10px;
+}
+
+.grid-header {
+  color: white;
+}
+
+.grid .todos {
+  margin: 0 auto;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    flex-direction: column;
+  }
+
+  .grid-container {
+    margin-top: 2rem;
+  }
+
+  .grid-container:nth-child(1) {
+    margin-right: 0;
+  }
+  
+  .grid-container:nth-child(2) {
+    margin-left: 0;
+  }
 }

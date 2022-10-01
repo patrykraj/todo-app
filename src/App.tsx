@@ -28,7 +28,11 @@ const App: React.FC = () => {
         setTodo={dispatch}
         handleCreateTodo={handleCreateTodo}
       />
-      <TodoList todos={state.todos} setTodos={dispatch} />
+      <TodoList
+        todos={state.todos}
+        completedTodos={state.completedTodos}
+        setTodos={dispatch}
+      />
     </div>
   );
 };

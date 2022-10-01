@@ -14,6 +14,26 @@ export type Action =
   | { type: "DONE"; payload: number }
   | { type: "INPUT"; payload: string }
   | {
+      type: "DRAG";
+      payload: {
+        arrayType: string;
+        array: Todo[];
+      };
+    }
+  | {
+      type: "DRAGTOLIST";
+      payload: {
+        source: {
+          sourceArr: Todo[];
+          type: string;
+        };
+        destination: {
+          destinationArr: Todo[];
+          type: string;
+        };
+      };
+    }
+  | {
       type: "EDIT";
       payload: {
         id: number;
@@ -32,6 +52,8 @@ export enum actions {
   Delete = "DELETE",
   Done = "DONE",
   Input = "INPUT",
+  Drag = "DRAG",
+  DragToList = "DRAGTOLIST",
   Edit = "EDIT",
 }
 
@@ -64,6 +86,18 @@ function reducer(state: State, action: Action) {
             ? { ...item, description: action.payload.editValue }
             : item,
         ),
+      };
+    case actions.Drag:
+      return {
+        ...state,
+        [action.payload.arrayType]: action.payload.array,
+      };
+    case actions.DragToList:
+      return {
+        ...state,
+        [action.payload.source.type]: action.payload.source.sourceArr,
+        [action.payload.destination.type]:
+          action.payload.destination.destinationArr,
       };
     default:
       throw new Error();
