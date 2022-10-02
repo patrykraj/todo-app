@@ -13,6 +13,7 @@ type Props = {
   setTodos: Dispatch;
   isDone: boolean;
   dragIdx: number;
+  todoState: string;
 };
 
 const SingleTodo: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const SingleTodo: React.FC<Props> = ({
   isDone,
   setTodos,
   dragIdx,
+  todoState,
 }) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -28,14 +30,20 @@ const SingleTodo: React.FC<Props> = ({
   const handleDeleteTodo = () => {
     setTodos({
       type: actions.Delete,
-      payload: id,
+      payload: {
+        id,
+        type: todoState,
+      },
     });
   };
 
   const handleIsDone = () => {
     setTodos({
       type: actions.Done,
-      payload: id,
+      payload: {
+        id,
+        type: todoState,
+      },
     });
   };
 
@@ -60,6 +68,7 @@ const SingleTodo: React.FC<Props> = ({
                 setEditMode={setEditMode}
                 setTodos={setTodos}
                 id={id}
+                todoState={todoState}
               />
             ) : (
               children

@@ -10,8 +10,20 @@ const initialState = {
 
 export type Action =
   | { type: "ADD"; payload: Todo }
-  | { type: "DELETE"; payload: number }
-  | { type: "DONE"; payload: number }
+  | {
+      type: "DELETE";
+      payload: {
+        id: number;
+        type: string;
+      };
+    }
+  | {
+      type: "DONE";
+      payload: {
+        id: number;
+        type: string;
+      };
+    }
   | { type: "INPUT"; payload: string }
   | {
       type: "DRAG";
@@ -38,6 +50,7 @@ export type Action =
       payload: {
         id: number;
         editValue: string;
+        type: string;
       };
     };
 export type Dispatch = (action: Action) => void;
@@ -57,20 +70,35 @@ export enum actions {
   Edit = "EDIT",
 }
 
+enum arrayTypes {
+  todos = "todos",
+  completedTodos = "completedTodos",
+}
+
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case actions.Add:
-      return { ...state, todos: [...state.todos, action.payload], input: "" };
+      return {
+        ...state,
+        todos: [...state.todos, action.payload],
+        input: initialState.input,
+      };
     case actions.Delete:
       return {
         ...state,
-        todos: state.todos.filter((item: Todo) => item.id !== action.payload),
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].filter((item: Todo) => item.id !== action.payload.id),
       };
     case actions.Done:
       return {
         ...state,
-        todos: state.todos.map((item: Todo) =>
-          item.id === action.payload ? { ...item, isDone: !item.isDone } : item,
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].map((item: Todo) =>
+          item.id === action.payload.id
+            ? { ...item, isDone: !item.isDone }
+            : item,
         ),
       };
     case actions.Input:
@@ -81,7 +109,9 @@ function reducer(state: State, action: Action) {
     case actions.Edit:
       return {
         ...state,
-        todos: state.todos.map((item: Todo) =>
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].map((item: Todo) =>
           item.id === action.payload.id
             ? { ...item, description: action.payload.editValue }
             : item,

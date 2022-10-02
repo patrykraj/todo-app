@@ -18,7 +18,7 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
     const { source, destination } = result;
 
     if (!destination) {
-      return "";
+      return;
     }
 
     let sourceArr;
@@ -45,7 +45,7 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
             source.droppableId === "todos" ? "todos" : "completedTodos",
         },
       });
-      return "";
+      return;
     }
 
     destinationArr.splice(destination.index, 0, element);
@@ -62,7 +62,7 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
         },
       },
     });
-    return "";
+    return;
   };
 
   return (
@@ -84,6 +84,7 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
                     setTodos={setTodos}
                     isDone={item.isDone}
                     dragIdx={dragIdx}
+                    todoState="todos"
                   >
                     {item.description}
                   </SingleTodo>
@@ -109,6 +110,7 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
                     setTodos={setTodos}
                     isDone={item.isDone}
                     dragIdx={dragIdx}
+                    todoState="completedTodos"
                   >
                     {item.description}
                   </SingleTodo>
