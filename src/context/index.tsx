@@ -10,14 +10,47 @@ const initialState = {
 
 export type Action =
   | { type: "ADD"; payload: Todo }
-  | { type: "DELETE"; payload: number }
-  | { type: "DONE"; payload: number }
+  | {
+      type: "DELETE";
+      payload: {
+        id: number;
+        type: string;
+      };
+    }
+  | {
+      type: "DONE";
+      payload: {
+        id: number;
+        type: string;
+      };
+    }
   | { type: "INPUT"; payload: string }
+  | {
+      type: "DRAG";
+      payload: {
+        arrayType: string;
+        array: Todo[];
+      };
+    }
+  | {
+      type: "DRAGTOLIST";
+      payload: {
+        source: {
+          sourceArr: Todo[];
+          type: string;
+        };
+        destination: {
+          destinationArr: Todo[];
+          type: string;
+        };
+      };
+    }
   | {
       type: "EDIT";
       payload: {
         id: number;
         editValue: string;
+        type: string;
       };
     };
 export type Dispatch = (action: Action) => void;
@@ -32,23 +65,40 @@ export enum actions {
   Delete = "DELETE",
   Done = "DONE",
   Input = "INPUT",
+  Drag = "DRAG",
+  DragToList = "DRAGTOLIST",
   Edit = "EDIT",
+}
+
+enum arrayTypes {
+  todos = "todos",
+  completedTodos = "completedTodos",
 }
 
 function reducer(state: State, action: Action) {
   switch (action.type) {
     case actions.Add:
-      return { ...state, todos: [...state.todos, action.payload], input: "" };
+      return {
+        ...state,
+        todos: [...state.todos, action.payload],
+        input: initialState.input,
+      };
     case actions.Delete:
       return {
         ...state,
-        todos: state.todos.filter((item: Todo) => item.id !== action.payload),
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].filter((item: Todo) => item.id !== action.payload.id),
       };
     case actions.Done:
       return {
         ...state,
-        todos: state.todos.map((item: Todo) =>
-          item.id === action.payload ? { ...item, isDone: !item.isDone } : item,
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].map((item: Todo) =>
+          item.id === action.payload.id
+            ? { ...item, isDone: !item.isDone }
+            : item,
         ),
       };
     case actions.Input:
@@ -59,11 +109,25 @@ function reducer(state: State, action: Action) {
     case actions.Edit:
       return {
         ...state,
-        todos: state.todos.map((item: Todo) =>
+        [action.payload.type]: state[
+          action.payload.type as keyof typeof arrayTypes
+        ].map((item: Todo) =>
           item.id === action.payload.id
             ? { ...item, description: action.payload.editValue }
             : item,
         ),
+      };
+    case actions.Drag:
+      return {
+        ...state,
+        [action.payload.arrayType]: action.payload.array,
+      };
+    case actions.DragToList:
+      return {
+        ...state,
+        [action.payload.source.type]: action.payload.source.sourceArr,
+        [action.payload.destination.type]:
+          action.payload.destination.destinationArr,
       };
     default:
       throw new Error();

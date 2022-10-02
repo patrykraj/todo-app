@@ -7,6 +7,7 @@ interface EditFieldTypes {
   defaultValue: string;
   setTodos: Dispatch;
   id: number;
+  todoState: string;
 }
 
 const EditField = ({
@@ -15,6 +16,7 @@ const EditField = ({
   setEditMode,
   setTodos,
   id,
+  todoState,
 }: EditFieldTypes) => {
   const [editValue, setEditValue] = useState<string>(defaultValue);
 
@@ -25,6 +27,7 @@ const EditField = ({
       payload: {
         id,
         editValue,
+        type: todoState,
       },
     });
     setEditMode(false);
