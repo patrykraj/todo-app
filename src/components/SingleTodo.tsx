@@ -53,9 +53,11 @@ const SingleTodo: React.FC<Props> = ({
 
   return (
     <Draggable draggableId={id.toString()} index={dragIdx}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <li
-          className={`list-element ${isDone ? "done" : ""}`}
+          className={`list-element ${isDone ? "done" : ""} ${
+            snapshot.isDragging ? "drag" : ""
+          }`}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

@@ -68,9 +68,13 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="grid">
-        <div className="grid-container">
-          <Droppable droppableId="todos">
-            {(provided) => (
+        <Droppable droppableId="todos">
+          {(provided, snapshot) => (
+            <div
+              className={`grid-container ${
+                snapshot.isDraggingOver ? "dragActive" : ""
+              }`}
+            >
               <ul
                 className="todos active"
                 ref={provided.innerRef}
@@ -91,12 +95,16 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
                 ))}
                 {provided.placeholder}
               </ul>
-            )}
-          </Droppable>
-        </div>
-        <div className="grid-container">
-          <Droppable droppableId="completedTodos">
-            {(provided) => (
+            </div>
+          )}
+        </Droppable>
+        <Droppable droppableId="completedTodos">
+          {(provided, snapshot) => (
+            <div
+              className={`grid-container ${
+                snapshot.isDraggingOver ? "dragActive" : ""
+              }`}
+            >
               <ul
                 className="todos completed"
                 ref={provided.innerRef}
@@ -117,9 +125,9 @@ const TodoList: React.FC<Props> = ({ todos, completedTodos, setTodos }) => {
                 ))}
                 {provided.placeholder}
               </ul>
-            )}
-          </Droppable>
-        </div>
+            </div>
+          )}
+        </Droppable>
       </div>
     </DragDropContext>
   );
